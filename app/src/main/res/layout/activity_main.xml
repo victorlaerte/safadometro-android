@@ -122,7 +122,7 @@
 			android:textSize="18sp"
 			android:gravity="center"
             android:text="Calcular" />
-        
+
     </LinearLayout>
     
     <LinearLayout
@@ -183,9 +183,15 @@
         android:textSize="16sp"
         android:textColor="#FF0000"
         android:layout_margin="10dp"/>
-        
-        
+
+        <com.facebook.share.widget.ShareButton
+            android:visibility="gone"
+            android:id="@+id/fb_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"/>
+
     </LinearLayout>
-    
-    
+
 </RelativeLayout>

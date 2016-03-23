@@ -1,10 +1,7 @@
 package com.victorlaerte.safadometro;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,182 +14,213 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class MainActivity extends Activity {
 
-	private Spinner yearSpinner;
-	private Spinner monthSpinner;
-	private Spinner daySpinner;
-	private double year;
-	private double month;
-	private double day;
-	private double safadeza;
-	private double anjo;
+    private Spinner yearSpinner;
+    private Spinner monthSpinner;
+    private Spinner daySpinner;
+    private double year;
+    private double month;
+    private double day;
+    private double vagabundo;
+    private double anjo;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
 
-		populateYearSpinner();
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
-		populateMonthSpinner();
+        setContentView(R.layout.activity_main);
 
-		Button calculateButton = (Button) findViewById(R.id.calculateButton);
-		calculateButton.setOnClickListener(new OnClickListener() {
+        populateYearSpinner();
 
-			@Override
-			public void onClick(View v) {
+        populateMonthSpinner();
 
-				safadeza = calculateSafadeza();
-				Log.d("", "Safadeza " + safadeza);
-				anjo = calculateAnjo(safadeza);
-				Log.d("", "Anjo " + anjo);
+        Button calculateButton = (Button) findViewById(R.id.calculateButton);
+        calculateButton.setOnClickListener(new OnClickListener() {
 
-				TextView anjoTxtView = (TextView) findViewById(R.id.anjoString);
-				anjoTxtView.setText(anjo + "% Anjo");
+            @Override
+            public void onClick(View v) {
 
-				TextView vabagundoTxtView = (TextView) findViewById(R.id.vagabundoString);
-				vabagundoTxtView.setText(safadeza + "% Vagabundo");
-			}
-		});
+                vagabundo = calculateVagabundo();
+                Log.d("", "Vagabundo " + vagabundo);
+                anjo = calculateAnjo(vagabundo);
+                Log.d("", "Anjo " + anjo);
 
-		// LikeView likeView = (LikeView) findViewById(R.id.likeView);
-		// likeView.setLikeViewStyle(LikeView.Style.BOX_COUNT);
-		// likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.INLINE);
-		//
-		// likeView.setObjectIdAndType("https://www.facebook.com/FacebookDevelopers", LikeView.ObjectType.PAGE);
-	}
+                TextView anjoTxtView = (TextView) findViewById(R.id.anjoString);
+                anjoTxtView.setText(anjo + "% Anjo");
 
-	private double calculateSafadeza() {
+                TextView vabagundoTxtView = (TextView) findViewById(R.id.vagabundoString);
+                vabagundoTxtView.setText(vagabundo + "% Vagabundo");
 
-		double safadeza = 0;
+                ShareButton shareButton = (ShareButton) findViewById(R.id.fb_share_button);
+                shareButton.setVisibility(View.VISIBLE);
 
-		int somatorio = sum((int) month);
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentTitle("Sou " + anjo + " anjo, perfeito mas aquele " + vagabundo + " é vagabunbdo")
+                        .setContentDescription("Calcule sua porcentagem Anjo com o safadômetro para Android e em breve para IOs!!")
+                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.victorlaerte.safadometro"))
+                        .build();
 
-		safadeza = somatorio + (year / 100) * (50 - day);
+                shareButton.setShareContent(content);
+            }
+        });
+    }
 
-		return safadeza;
-	}
+    private double calculateVagabundo() {
 
-	private double calculateAnjo(double safadeza) {
+        double vagabundo = 0;
 
-		return 100 - safadeza;
-	}
+        int somatorio = sum((int) month);
 
-	private void populateYearSpinner() {
+        vagabundo = somatorio + (year / 100) * (50 - day);
 
-		yearSpinner = (Spinner) findViewById(R.id.yearSpinner);
+        return vagabundo;
+    }
 
-		List<Integer> yearList = new ArrayList<Integer>();
+    private double calculateAnjo(double vagabundo) {
 
-		Calendar now = Calendar.getInstance();
-		int currentYear = now.get(Calendar.YEAR);
+        return 100 - vagabundo;
+    }
 
-		for (int i = 1950; i < (currentYear - 1); i++) {
+    private void populateYearSpinner() {
 
-			yearList.add(i);
-		}
+        yearSpinner = (Spinner) findViewById(R.id.yearSpinner);
 
-		ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, yearList);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        List<Integer> yearList = new ArrayList<Integer>();
 
-		yearSpinner.setAdapter(arrayAdapter);
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
 
-		yearSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        for (int i = 1950; i < (currentYear - 1); i++) {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            yearList.add(i);
+        }
 
-				year = ((Integer) yearSpinner.getSelectedItem()) % 100;
-				Log.d("", "Year selected " + year);
-			}
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, yearList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
+        yearSpinner.setAdapter(arrayAdapter);
 
-			}
-		});
+        yearSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-	}
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-	private void populateMonthSpinner() {
+                year = ((Integer) yearSpinner.getSelectedItem()) % 100;
+                Log.d("", "Year selected " + year);
+            }
 
-		monthSpinner = (Spinner) findViewById(R.id.monthSpinner);
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
 
-		Months[] values = Months.values();
+            }
+        });
 
-		SpinnerAdapter arrayAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, values);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    }
 
-		monthSpinner.setAdapter(arrayAdapter);
+    private void populateMonthSpinner() {
 
-		monthSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        monthSpinner = (Spinner) findViewById(R.id.monthSpinner);
 
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+        Months[] values = Months.values();
 
-				Months selectedMonth = (Months) monthSpinner.getSelectedItem();
-				populateDaySpinner((selectedMonth.getNumberOfDays()));
+        SpinnerAdapter arrayAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, values);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-				month = selectedMonth.ordinal() + 1;
-				Log.d("", "Month selected " + month);
-			}
+        monthSpinner.setAdapter(arrayAdapter);
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
+        monthSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			}
-		});
-	}
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-	private void populateDaySpinner(int numberOfDays) {
+                Months selectedMonth = (Months) monthSpinner.getSelectedItem();
+                populateDaySpinner((selectedMonth.getNumberOfDays()));
 
-		daySpinner = (Spinner) findViewById(R.id.daySpinner);
+                month = selectedMonth.ordinal() + 1;
+                Log.d("", "Month selected " + month);
+            }
 
-		List<Integer> daysList = new ArrayList<Integer>();
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
 
-		for (int i = 1; i < (numberOfDays + 1); i++) {
+            }
+        });
+    }
 
-			daysList.add(i);
-		}
+    private void populateDaySpinner(int numberOfDays) {
 
-		ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, daysList);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        daySpinner = (Spinner) findViewById(R.id.daySpinner);
 
-		daySpinner.setAdapter(arrayAdapter);
+        List<Integer> daysList = new ArrayList<Integer>();
 
-		daySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        for (int i = 1; i < (numberOfDays + 1); i++) {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            daysList.add(i);
+        }
 
-				day = (Integer) daySpinner.getSelectedItem();
-				Log.d("", "Day selected " + day);
-			}
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, daysList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
+        daySpinner.setAdapter(arrayAdapter);
 
-			}
-		});
+        daySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-	}
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-	private int sum(int n) {
+                day = (Integer) daySpinner.getSelectedItem();
+                Log.d("", "Day selected " + day);
+            }
 
-		if (n <= 0) {
-			return n;
-		}
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
 
-		int sum = 0;
-		for (int i = n; i > 0; i--) {
+            }
+        });
 
-			sum += i;
-		}
+    }
 
-		return sum;
-	}
+    private int sum(int n) {
+
+        if (n <= 0) {
+            return n;
+        }
+
+        int sum = 0;
+        for (int i = n; i > 0; i--) {
+
+            sum += i;
+        }
+
+        return sum;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppEventsLogger.deactivateApp(this);
+    }
 }
