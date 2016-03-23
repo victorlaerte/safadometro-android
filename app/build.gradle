@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.5.0'
+    compile 'com.google.android.gms:play-services:4.3.23'
 }
 
 
