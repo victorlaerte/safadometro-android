@@ -11,12 +11,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.LikeView;
 import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -69,7 +71,9 @@ public class MainActivity extends Activity {
                 vabagundoTxtView.setText(vagabundo + "% Vagabundo");
 
                 ShareButton shareButton = (ShareButton) findViewById(R.id.fb_share_button);
-                shareButton.setVisibility(View.VISIBLE);
+
+                LinearLayout shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
+                shareLayout.setVisibility(View.VISIBLE);
 
                 ShareLinkContent content = new ShareLinkContent.Builder()
                         .setContentTitle("Sou " + anjo + " anjo, perfeito mas aquele " + vagabundo + " é vagabunbdo")
@@ -80,6 +84,12 @@ public class MainActivity extends Activity {
                 shareButton.setShareContent(content);
             }
         });
+
+        LikeView likeView = (LikeView) findViewById(R.id.likeView);
+        likeView.setLikeViewStyle(LikeView.Style.BOX_COUNT);
+        likeView.setAuxiliaryViewPosition(LikeView.AuxiliaryViewPosition.INLINE);
+
+        likeView.setObjectIdAndType("https://www.facebook.com/appsafadometro", LikeView.ObjectType.PAGE);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
