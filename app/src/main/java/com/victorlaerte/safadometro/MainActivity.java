@@ -1,6 +1,7 @@
 package com.victorlaerte.safadometro;
 
 import android.app.Activity;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,7 +28,9 @@ import com.google.android.gms.ads.AdView;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -61,6 +65,10 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+
+                RelativeLayout layout = (RelativeLayout) findViewById(R.id.mainLayout);
+                TransitionDrawable transition = (TransitionDrawable) layout.getBackground();
+                transition.startTransition(1000);
 
                 vagabundo = calculateVagabundo();
                 Log.d("", "Vagabundo " + vagabundo);
@@ -124,12 +132,12 @@ public class MainActivity extends Activity {
         Calendar now = Calendar.getInstance();
         int currentYear = now.get(Calendar.YEAR);
 
-        for (int i = 1950; i < (currentYear - 1); i++) {
+        for (int i = 1960; i < (currentYear - 1); i++) {
 
             yearList.add(i);
         }
 
-        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, yearList);
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_list_item_1, yearList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         yearSpinner.setAdapter(arrayAdapter);
@@ -157,7 +165,7 @@ public class MainActivity extends Activity {
 
         Months[] values = Months.values();
 
-        SpinnerAdapter arrayAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, values);
+        SpinnerAdapter arrayAdapter = new SpinnerAdapter(this, android.R.layout.simple_list_item_1, values);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         monthSpinner.setAdapter(arrayAdapter);
@@ -192,7 +200,7 @@ public class MainActivity extends Activity {
             daysList.add(i);
         }
 
-        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, daysList);
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_list_item_1, daysList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         daySpinner.setAdapter(arrayAdapter);

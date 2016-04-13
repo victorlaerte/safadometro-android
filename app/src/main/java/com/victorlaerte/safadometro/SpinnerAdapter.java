@@ -41,6 +41,7 @@ public class SpinnerAdapter extends ArrayAdapter<Months> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		TextView label = new TextView(context);
+		label.setPadding(29, 29, 29, 29);
 		label.setTextColor(Color.BLACK);
 		label.setText(values[position].getLabel());
 
@@ -51,6 +52,7 @@ public class SpinnerAdapter extends ArrayAdapter<Months> {
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
 		TextView label = new TextView(context);
+        label.setPadding(29, 29, 29, 29);
 		label.setTextColor(Color.BLACK);
 		label.setText(values[position].getLabel());
 
