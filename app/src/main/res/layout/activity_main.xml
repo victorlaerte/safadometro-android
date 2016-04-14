@@ -208,7 +208,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:textColor="@color/white"
-                android:text="Compartilhe seu resultado no facebook"/>
+                android:text="Compartilhe no facebook"/>
 
             <com.facebook.share.widget.ShareButton
                 android:id="@+id/fb_share_button"
@@ -230,7 +230,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:textColor="@color/white"
-                android:text="Curta nossa página no facebook"/>
+                android:text="Curta o safadômetro"/>
 
             <com.facebook.share.widget.LikeView
                 android:id="@+id/likeView"

@@ -27,6 +27,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import io.fabric.sdk.android.Fabric;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -67,19 +69,22 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 RelativeLayout layout = (RelativeLayout) findViewById(R.id.mainLayout);
-                TransitionDrawable transition = (TransitionDrawable) layout.getBackground();
+                final TransitionDrawable transition = (TransitionDrawable) layout.getBackground();
+
                 transition.startTransition(1000);
 
                 vagabundo = calculateVagabundo();
-                Log.d("", "Vagabundo " + vagabundo);
+                String vagabundoPercent = new DecimalFormat("##.##").format(vagabundo);
+                Log.d("", "Vagabundo " + vagabundoPercent);
                 anjo = calculateAnjo(vagabundo);
-                Log.d("", "Anjo " + anjo);
+                String anjoPercent = new DecimalFormat("##.##").format(anjo);
+                Log.d("", "Anjo " + anjoPercent);
 
                 TextView anjoTxtView = (TextView) findViewById(R.id.anjoString);
-                anjoTxtView.setText(anjo + "% Anjo");
+                anjoTxtView.setText(anjoPercent + "% Anjo");
 
                 TextView vabagundoTxtView = (TextView) findViewById(R.id.vagabundoString);
-                vabagundoTxtView.setText(vagabundo + "% Vagabundo");
+                vabagundoTxtView.setText(vagabundoPercent + "% Vagabundo");
 
                 ShareButton shareButton = (ShareButton) findViewById(R.id.fb_share_button);
 
@@ -87,8 +92,8 @@ public class MainActivity extends Activity {
                 shareLayout.setVisibility(View.VISIBLE);
 
                 ShareLinkContent content = new ShareLinkContent.Builder()
-                        .setContentTitle("Sou " + anjo + " anjo, perfeito mas aquele " + vagabundo + " é vagabunbdo")
-                        .setContentDescription("Calcule sua porcentagem Anjo com o safadômetro para Android e em breve para IOs!!")
+                        .setContentTitle("Sou " + anjo + " anjo, perfeito mas aquele " + vagabundo + " é vagabundo")
+                        .setContentDescription("Sou " + anjo + " anjo, perfeito mas aquele " + vagabundo + " é vagabundo")
                         .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.victorlaerte.safadometro"))
                         .build();
 
@@ -149,6 +154,8 @@ public class MainActivity extends Activity {
 
                 year = ((Integer) yearSpinner.getSelectedItem()) % 100;
                 Log.d("", "Year selected " + year);
+
+                revertTransition();
             }
 
             @Override
@@ -180,6 +187,8 @@ public class MainActivity extends Activity {
 
                 month = selectedMonth.ordinal() + 1;
                 Log.d("", "Month selected " + month);
+
+                revertTransition();
             }
 
             @Override
@@ -187,6 +196,7 @@ public class MainActivity extends Activity {
 
             }
         });
+
     }
 
     private void populateDaySpinner(int numberOfDays) {
@@ -212,6 +222,8 @@ public class MainActivity extends Activity {
 
                 day = (Integer) daySpinner.getSelectedItem();
                 Log.d("", "Day selected " + day);
+
+                revertTransition();
             }
 
             @Override
@@ -220,6 +232,14 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+
+    private void revertTransition() {
+
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.mainLayout);
+        final TransitionDrawable transition = (TransitionDrawable) layout.getBackground();
+
+        transition.resetTransition();
     }
 
     private int sum(int n) {

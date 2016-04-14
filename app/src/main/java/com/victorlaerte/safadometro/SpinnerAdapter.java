@@ -9,53 +9,53 @@ import android.widget.TextView;
 
 public class SpinnerAdapter extends ArrayAdapter<Months> {
 
-	private Context context;
-	private Months[] values;
+    private Context context;
+    private Months[] values;
 
-	public SpinnerAdapter(Context context, int textViewResourceId, Months[] values) {
+    public SpinnerAdapter(Context context, int textViewResourceId, Months[] values) {
 
-		super(context, textViewResourceId, values);
-		this.context = context;
-		this.values = values;
-	}
+        super(context, textViewResourceId, values);
+        this.context = context;
+        this.values = values;
+    }
 
-	@Override
-	public int getCount() {
+    @Override
+    public int getCount() {
 
-		return values.length;
-	}
+        return values.length;
+    }
 
-	@Override
-	public Months getItem(int position) {
+    @Override
+    public Months getItem(int position) {
 
-		return values[position];
-	}
+        return values[position];
+    }
 
-	@Override
-	public long getItemId(int position) {
+    @Override
+    public long getItemId(int position) {
 
-		return position;
-	}
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-		TextView label = new TextView(context);
-		label.setPadding(29, 29, 29, 29);
-		label.setTextColor(Color.BLACK);
-		label.setText(values[position].getLabel());
+        TextView label = new TextView(context);
+        label.setPadding(AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context));
+        label.setTextColor(Color.BLACK);
+        label.setText(values[position].getLabel());
 
-		return label;
-	}
+        return label;
+    }
 
-	@Override
-	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
-		TextView label = new TextView(context);
-        label.setPadding(29, 29, 29, 29);
-		label.setTextColor(Color.BLACK);
-		label.setText(values[position].getLabel());
+        TextView label = new TextView(context);
+        label.setPadding(AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context), AndroidUtil.convertDpToPixel(14.5f, context));
+        label.setTextColor(Color.BLACK);
+        label.setText(values[position].getLabel());
 
-		return label;
-	}
+        return label;
+    }
 }
